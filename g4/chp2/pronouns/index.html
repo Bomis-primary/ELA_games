@@ -5,91 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Pronouns Quest - Grade 4</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family: Arial, sans-serif;
-  background: radial-gradient(circle at top, #243b55 0%, #141e30 45%, #000 100%);
-  color: #fff;
-  min-height: 100vh;
-  display:flex; justify-content:center; align-items:center; padding:10px;
-}
-.splash-screen {
-  position:fixed; inset:0; background:#fff; display:flex; justify-content:center; align-items:center;
-  z-index:9999; transition:opacity 0.5s ease-out;
-}
-.splash-screen.hidden { opacity:0; pointer-events:none; }
-.splash-screen img { max-width:480px; width:90%; height:auto; animation:logoFloat 2s ease-in-out infinite; }
-@keyframes logoFloat {0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
+/* Basic reset and body */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial,sans-serif;background:radial-gradient(circle at top,#243b55 0%,#141e30 45%,#000 100%);color:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:10px;}
 
-.container { max-width:1100px; width:100%; background:#0b1020; border-radius:20px; border:3px solid #ffd700; box-shadow:0 0 40px rgba(255,215,0,0.4); overflow:hidden; opacity:0; transition:opacity 0.6s ease-in; }
-.container.visible { opacity:1; }
+/* Splash Screen */
+.splash-screen{position:fixed;inset:0;background:#fff;display:flex;justify-content:center;align-items:center;z-index:9999;transition:opacity 0.5s ease-out;}
+.splash-screen.hidden{opacity:0;pointer-events:none;}
+.splash-screen img{max-width:480px;width:90%;height:auto;animation:logoFloat 2s ease-in-out infinite;}
+@keyframes logoFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
 
-.header { position:relative; padding:25px 20px 30px; text-align:center; background:linear-gradient(135deg,#ffd700 0%,#ff9f1c 100%); color:#1a1a2e; box-shadow:0 5px 20px rgba(255,215,0,0.5);}
-.header h1 { font-size:32px; letter-spacing:2px; text-shadow:2px 2px 4px rgba(0,0,0,0.3); margin-bottom:6px;}
-.subtitle { font-size:16px; font-weight:bold; }
-.stage-indicator { display:inline-block; margin-top:10px; padding:8px 20px; border-radius:20px; background:rgba(26,26,46,0.9); border:2px solid #ffd700; color:#ffd700; font-weight:bold; font-size:16px; }
+/* Container */
+.container{max-width:1100px;width:100%;background:#0b1020;border-radius:20px;border:3px solid #ffd700;box-shadow:0 0 40px rgba(255,215,0,0.4);overflow:hidden;opacity:0;transition:opacity 0.6s ease-in;}
+.container.visible{opacity:1;}
 
-.board-wrapper { display:flex; flex-wrap:wrap; padding:20px; gap:20px; background:radial-gradient(circle at top,#1f2937 0%,#020617 60%);}
-.board-area { flex:1.2; min-width:320px; background:radial-gradient(circle at center,#1e293b 0%,#020617 70%); border-radius:18px; border:2px solid rgba(148,163,184,0.6); padding:20px 18px 16px; position:relative; overflow:hidden;}
-.board-title { text-align:center; font-size:18px; margin-bottom:8px; color:#e5e7eb; font-weight:bold; text-transform:uppercase; letter-spacing:1px;}
-.board-path { position:relative; margin-top:10px; padding:18px 10px 10px; }
-.path-line { position:absolute; inset:40px 22px 30px; border-radius:30px; border:3px dashed rgba(251,191,36,0.7); opacity:0.7;}
-.cells { display:grid; grid-template-columns:repeat(5,1fr); grid-auto-rows:60px; gap:10px; position:relative; z-index:1;}
-.cell { position:relative; border-radius:14px; border:2px solid rgba(148,163,184,0.9); background:radial-gradient(circle at top left, rgba(56,189,248,0.4), rgba(15,23,42,0.9)); display:flex; align-items:center; justify-content:center; font-size:14px; text-align:center; padding:4px; color:#e5e7eb; box-shadow:0 4px 10px rgba(15,23,42,0.9);}
-.cell.start { background:radial-gradient(circle at top, rgba(34,197,94,0.6), rgba(15,23,42,0.9)); border-color:#22c55e; font-weight:bold;}
-.cell.finish { background:radial-gradient(circle at top, rgba(251,191,36,0.8), rgba(15,23,42,0.95)); border-color:#facc15; font-weight:bold;}
-.cell span.step-number { position:absolute; top:4px; left:6px; font-size:11px; opacity:0.8; }
+/* Header */
+.header{padding:25px 20px 30px;text-align:center;background:linear-gradient(135deg,#ffd700 0%,#ff9f1c 100%);color:#1a1a2e;box-shadow:0 5px 20px rgba(255,215,0,0.5);}
+.header h1{font-size:32px;letter-spacing:2px;text-shadow:2px 2px 4px rgba(0,0,0,0.3);margin-bottom:6px;}
+.subtitle{font-size:16px;font-weight:bold;}
+.stage-indicator{display:inline-block;margin-top:10px;padding:8px 20px;border-radius:20px;background:rgba(26,26,46,0.9);border:2px solid #ffd700;color:#ffd700;font-weight:bold;font-size:16px;}
 
-.token { position:absolute; width:26px; height:26px; border-radius:50%; background:radial-gradient(circle at top,#f97316 0%,#b91c1c 70%); border:2px solid #fed7aa; box-shadow:0 0 14px rgba(248,250,252,0.9); display:flex; align-items:center; justify-content:center; font-size:16px; transform:translate(-50%,-60%); transition:all 0.6s ease-out; z-index:3; }
+/* Board */
+.board-wrapper{display:flex;flex-wrap:wrap;padding:20px;gap:20px;background:radial-gradient(circle at top,#1f2937 0%,#020617 60%);}
+.board-area{flex:1.2;min-width:320px;background:radial-gradient(circle at center,#1e293b 0%,#020617 70%);border-radius:18px;border:2px solid rgba(148,163,184,0.6);padding:20px 18px 16px;position:relative;overflow:hidden;}
+.board-title{text-align:center;font-size:18px;margin-bottom:8px;color:#e5e7eb;font-weight:bold;text-transform:uppercase;letter-spacing:1px;}
+.board-path{position:relative;margin-top:10px;padding:18px 10px 10px;}
+.path-line{position:absolute;inset:40px 22px 30px;border-radius:30px;border:3px dashed rgba(251,191,36,0.7);opacity:0.7;}
+.cells{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:60px;gap:10px;position:relative;z-index:1;}
+.cell{position:relative;border-radius:14px;border:2px solid rgba(148,163,184,0.9);background:radial-gradient(circle at top left, rgba(56,189,248,0.4), rgba(15,23,42,0.9));display:flex;align-items:center;justify-content:center;font-size:14px;text-align:center;padding:4px;color:#e5e7eb;box-shadow:0 4px 10px rgba(15,23,42,0.9);}
+.cell.start{background:radial-gradient(circle at top, rgba(34,197,94,0.6), rgba(15,23,42,0.9));border-color:#22c55e;font-weight:bold;}
+.cell.finish{background:radial-gradient(circle at top, rgba(251,191,36,0.8), rgba(15,23,42,0.95));border-color:#facc15;font-weight:bold;}
+.cell span.step-number{position:absolute;top:4px;left:6px;font-size:11px;opacity:0.8;}
 
-.info-panel { margin-top:8px; display:flex; justify-content:space-between; gap:10px; font-size:13px; color:#9ca3af; }
+.token{position:absolute;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at top,#f97316 0%,#b91c1c 70%);border:2px solid #fed7aa;box-shadow:0 0 14px rgba(248,250,252,0.9);display:flex;align-items:center;justify-content:center;font-size:16px;transform:translate(-50%,-60%);transition:all 0.6s ease-out;z-index:3;}
 
-.score-panel { flex:0.9; min-width:260px; background:radial-gradient(circle at top,#020617 0%,#020617 60%); border-radius:18px; border:2px solid rgba(148,163,184,0.6); padding:18px; display:flex; flex-direction:column; gap:14px;}
-.score-row { display:flex; justify-content:space-between; gap:10px;}
-.score-card { flex:1; text-align:center; padding:10px 8px; border-radius:12px; background:radial-gradient(circle, rgba(15,23,42,0.9), rgba(2,6,23,1)); border:1px solid rgba(148,163,184,0.7); box-shadow:0 4px 10px rgba(15,23,42,0.8);}
-.score-label { font-size:12px; letter-spacing:0.5px; color:#9ca3af; text-transform:uppercase; margin-bottom:4px; }
-.score-value { font-size:22px; font-weight:bold; color:#e5e7eb; }
+/* Score Panel */
+.score-panel{flex:0.9;min-width:260px;background:radial-gradient(circle at top,#020617 0%,#020617 60%);border-radius:18px;border:2px solid rgba(148,163,184,0.6);padding:18px;display:flex;flex-direction:column;gap:14px;}
+.score-row{display:flex;justify-content:space-between;gap:10px;}
+.score-card{flex:1;text-align:center;padding:10px 8px;border-radius:12px;background:radial-gradient(circle, rgba(15,23,42,0.9), rgba(2,6,23,1));border:1px solid rgba(148,163,184,0.7);box-shadow:0 4px 10px rgba(15,23,42,0.8);}
+.score-label{font-size:12px;letter-spacing:0.5px;color:#9ca3af;text-transform:uppercase;margin-bottom:4px;}
+.score-value{font-size:22px;font-weight:bold;color:#e5e7eb;}
 
-.question-panel { margin-top:4px; background:radial-gradient(circle at top,#1f2937 0%,#020617 100%); border-radius:16px; border:1px solid rgba(148,163,184,0.7); padding:14px 14px 12px; box-shadow:inset 0 0 15px rgba(15,23,42,0.9);}
-.question-title { font-size:14px; font-weight:bold; color:#facc15; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;}
-.question-text { font-size:15px; line-height:1.5; margin-bottom:10px;}
-.options { display:flex; flex-direction:column; gap:8px; margin-bottom:8px; }
-.option-btn { border-radius:10px; border:1px solid rgba(148,163,184,0.8); background:linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.7)); color:#e5e7eb; padding:8px 10px; text-align:left; font-size:14px; cursor:pointer; transition:all 0.2s; }
-.option-btn:hover { border-color:#38bdf8; box-shadow:0 0 12px rgba(56,189,248,0.6); transform:translateY(-1px);}
-.option-btn.correct { background:linear-gradient(135deg,#15803d,#16a34a); border-color:#4ade80; color:#ecfdf5; box-shadow:0 0 18px rgba(34,197,94,0.9);}
-.option-btn.wrong { background:linear-gradient(135deg,#b91c1c,#7f1d1d); border-color:#f87171; color:#fee2e2; box-shadow:0 0 18px rgba(248,113,113,0.9);}
-.option-btn.disabled { pointer-events:none; opacity:0.9;}
+/* Question Panel */
+.question-panel{margin-top:4px;background:radial-gradient(circle at top,#1f2937 0%,#020617 100%);border-radius:16px;border:1px solid rgba(148,163,184,0.7);padding:14px 14px 12px;box-shadow:inset 0 0 15px rgba(15,23,42,0.9);}
+.question-title{font-size:14px;font-weight:bold;color:#facc15;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;}
+.question-text{font-size:15px;line-height:1.5;margin-bottom:10px;}
+.options{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;}
+.option-btn{border-radius:10px;border:1px solid rgba(148,163,184,0.8);background:linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.7));color:#e5e7eb;padding:8px 10px;text-align:left;font-size:14px;cursor:pointer;transition:all 0.2s;}
+.option-btn:hover{border-color:#38bdf8;box-shadow:0 0 12px rgba(56,189,248,0.6);transform:translateY(-1px);}
+.option-btn.correct{background:linear-gradient(135deg,#15803d,#16a34a);border-color:#4ade80;color:#ecfdf5;box-shadow:0 0 18px rgba(34,197,94,0.9);}
+.option-btn.wrong{background:linear-gradient(135deg,#b91c1c,#7f1d1d);border-color:#f87171;color:#fee2e2;box-shadow:0 0 18px rgba(248,113,113,0.9);}
+.option-btn.disabled{pointer-events:none;opacity:0.9;}
 
-.feedback { margin-top:6px; font-size:13px; line-height:1.5; border-radius:10px; padding:8px 10px; display:none; }
-.feedback.correct { background: rgba(22,163,74,0.2); border:1px solid #4ade80; color:#bbf7d0; }
-.feedback.wrong { background: rgba(185,28,28,0.2); border:1px solid #fca5a5; color:#fecaca; }
+.feedback{margin-top:6px;font-size:13px;line-height:1.5;border-radius:10px;padding:8px 10px;display:none;}
+.feedback.correct{background:rgba(22,163,74,0.2);border:1px solid #4ade80;color:#bbf7d0;}
+.feedback.wrong{background:rgba(185,28,28,0.2);border:1px solid #fca5a5;color:#fecaca;}
 
-.controls { margin-top:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:13px; color:#9ca3af;}
-.btn-primary { padding:9px 20px; border-radius:20px; border:none; font-size:14px; font-weight:bold; cursor:pointer; background:linear-gradient(135deg,#facc15,#ea580c); color:#111827; box-shadow:0 4px 12px rgba(251,191,36,0.6); text-transform:uppercase; letter-spacing:0.5px; display:none;}
-.btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(251,191,36,0.8);}
+.controls{margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:#9ca3af;}
+.btn-primary{padding:9px 20px;border-radius:20px;border:none;font-size:14px;font-weight:bold;cursor:pointer;background:linear-gradient(135deg,#facc15,#ea580c);color:#111827;box-shadow:0 4px 12px rgba(251,191,36,0.6);text-transform:uppercase;letter-spacing:0.5px;display:none;}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(251,191,36,0.8);}
 
-.volume-control { margin-top:6px; font-size:12px; display:flex; align-items:center; gap:8px; color:#9ca3af;}
-.volume-control input { flex:1; }
+/* Volume */
+.volume-control{margin-top:6px;font-size:12px;display:flex;align-items:center;gap:8px;color:#9ca3af;}
+.volume-control input{flex:1;}
 
-.final-screen { padding:30px 20px 26px; text-align:center; }
-.final-title { font-size:26px; margin-bottom:12px; color:#facc15; }
-.final-badge { font-size:60px; margin:12px 0; }
-.final-rank { font-size:22px; margin-bottom:8px; font-weight:bold; }
-.final-score { font-size:24px; margin:8px 0; }
-.final-text { font-size:15px; color:#e5e7eb; margin-bottom:16px; }
-@media(max-width:768px){ .header h1{font-size:24px;} .cells{grid-template-columns:repeat(4,1fr);} .board-wrapper{flex-direction:column;} .board-area,.score-panel{min-width:100%;} }
+/* Final Screen */
+.final-screen{padding:30px 20px 26px;text-align:center;}
+.final-title{font-size:26px;margin-bottom:12px;color:#facc15;}
+.final-badge{font-size:60px;margin:12px 0;}
+.final-rank{font-size:22px;margin-bottom:8px;font-weight:bold;}
+.final-score{font-size:24px;margin:8px 0;}
+.final-text{font-size:15px;color:#e5e7eb;margin-bottom:16px;}
+
+@media(max-width:768px){.header h1{font-size:24px;}.cells{grid-template-columns:repeat(4,1fr);}.board-wrapper{flex-direction:column;}.board-area,.score-panel{min-width:100%;}}
 </style>
 </head>
 <body>
-
+<!-- Splash -->
 <div class="splash-screen" id="splashScreen">
-<img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'" />
+<img src="assets/logo.png" alt="Logo"/>
 </div>
 
+<!-- Container -->
 <div class="container" id="mainContainer">
 <div class="header">
 <h1>🌌 PRONOUN QUEST 🌌</h1>
-<div class="subtitle">Grade 4 - Pronouns Practice</div>
+<div class="subtitle">Grade 4 - Pronouns</div>
 <div class="stage-indicator" id="stageIndicator">Step 1 of 10</div>
 </div>
 
@@ -143,8 +144,12 @@ body {
 </div>
 
 <script>
-// Splash screen
-setTimeout(()=>{ document.getElementById('splashScreen').classList.add('hidden'); document.getElementById('mainContainer').classList.add('visible'); initGame(); },5000);
+// Splash timeout + start game
+setTimeout(()=>{
+document.getElementById('splashScreen').classList.add('hidden');
+document.getElementById('mainContainer').classList.add('visible');
+initGame();
+},3000);
 
 // Audio
 const correctSound=new Audio('assets/correct.mp3');
@@ -152,16 +157,16 @@ const wrongSound=new Audio('assets/wrong.mp3');
 const celebrationSound=new Audio('assets/freesound_community-claps-44774.mp3');
 let volume=0.8;
 correctSound.volume=wrongSound.volume=celebrationSound.volume=volume;
-document.getElementById('volumeSlider').addEventListener('input',e=>{volume=e.target.value/100; correctSound.volume=wrongSound.volume=celebrationSound.volume=volume;});
-function playCorrectSound(){correctSound.currentTime=0; correctSound.play().catch(()=>{});}
-function playWrongSound(){wrongSound.currentTime=0; wrongSound.play().catch(()=>{});}
-function playCelebrationSound(){celebrationSound.currentTime=0; celebrationSound.play().catch(()=>{});}
+document.getElementById('volumeSlider').addEventListener('input',e=>{
+volume=e.target.value/100;
+correctSound.volume=wrongSound.volume=celebrationSound.volume=volume;
+});
 
-// Question bank for Pronouns
+// Question Bank - 10 sample pronoun questions
 const questionBank=[
 {question:"Choose the correct pronoun: ___ is my best friend.", options:["He","She","It","They"], correctIndex:0, explanation:"He is used for a male person."},
 {question:"Select the pronoun: Maria gave the book to ___ .", options:["he","him","his","she"], correctIndex:1, explanation:"Him is the correct object pronoun."},
-{question:"Fill in: John and I went to the park. ___ played football.", options:["We","Us","They","Them"], correctIndex:0, explanation:"We is the subject pronoun for John and I."},
+{question:"Fill in: John and I went to the park. ___ played football.", options:["We","Us","They","Them"], correctIndex:0, explanation:"We is the subject pronoun."},
 {question:"Which pronoun replaces the underlined noun? The cat is sleeping. ___ is very tired.", options:["He","It","They","She"], correctIndex:1, explanation:"It refers to the cat."},
 {question:"Select the correct pronoun: This is my book. The book is ___ .", options:["mine","my","me","I"], correctIndex:0, explanation:"Mine is possessive pronoun."},
 {question:"Choose reflexive pronoun: I made this cake by ___ .", options:["myself","himself","yourself","themselves"], correctIndex:0, explanation:"Myself is correct."},
@@ -172,57 +177,81 @@ const questionBank=[
 ];
 
 const TOTAL_STEPS=10;
-let currentQuestions=[], currentIndex=0, correctCount=0;
-const cellsContainer=document.getElementById('cellsContainer'), token=document.getElementById('token'),
-questionText=document.getElementById('questionText'), optionsContainer=document.getElementById('optionsContainer'),
-feedback=document.getElementById('feedback'), nextBtn=document.getElementById('nextBtn'),
-correctCountEl=document.getElementById('correctCount'), currentStepEl=document.getElementById('currentStep'),
-totalScoreEl=document.getElementById('totalScore'), stageIndicator=document.getElementById('stageIndicator');
+let currentQuestions=[],currentIndex=0,correctCount=0;
+const cellsContainer=document.getElementById('cellsContainer'),
+token=document.getElementById('token'),
+questionText=document.getElementById('questionText'),
+optionsContainer=document.getElementById('optionsContainer'),
+feedback=document.getElementById('feedback'),
+nextBtn=document.getElementById('nextBtn'),
+correctCountEl=document.getElementById('correctCount'),
+currentStepEl=document.getElementById('currentStep'),
+totalScoreEl=document.getElementById('totalScore'),
+stageIndicator=document.getElementById('stageIndicator');
 let cellPositions=[];
 
+// Initialize board
 function initBoard(){
-cellsContainer.innerHTML=''; cellPositions=[];
+cellsContainer.innerHTML='';
+cellPositions=[];
 const totalCells=TOTAL_STEPS+2;
 for(let i=0;i<totalCells;i++){
-  const cell=document.createElement('div'); cell.classList.add('cell');
-  if(i===0){ cell.classList.add('start'); cell.innerHTML='<span class="step-number">Start</span><span>Confusion</span>'; }
-  else if(i===totalCells-1){ cell.classList.add('finish'); cell.innerHTML='<span class="step-number">Finish</span><span>Clarity</span>'; }
-  else{ cell.innerHTML=`<span class="step-number">${i}</span><span>Step ${i}</span>`; }
-  cellsContainer.appendChild(cell);
+const cell=document.createElement('div');
+cell.classList.add('cell');
+if(i===0){cell.classList.add('start');cell.innerHTML='<span class="step-number">Start</span><span>Confusion</span>';}
+else if(i===totalCells-1){cell.classList.add('finish');cell.innerHTML='<span class="step-number">Finish</span><span>Clarity</span>';}
+else{cell.innerHTML=`<span class="step-number">${i}</span><span>Step ${i}</span>`;}
+cellsContainer.appendChild(cell);
 }
 const cellElems=Array.from(cellsContainer.children);
 cellElems.forEach(cell=>{
-  const rect=cell.getBoundingClientRect();
-  const parentRect=cellsContainer.getBoundingClientRect();
-  const x=rect.left-parentRect.left+rect.width/2;
-  const y=rect.top-parentRect.top+rect.height/2;
-  cellPositions.push({x,y});
+const rect=cell.getBoundingClientRect();
+const parentRect=cellsContainer.getBoundingClientRect();
+const x=rect.left-parentRect.left+rect.width/2;
+const y=rect.top-parentRect.top+rect.height/2;
+cellPositions.push({x,y});
 });
 moveTokenTo(0);
 }
 
-function moveTokenTo(stepIndex){const pos=cellPositions[stepIndex]; if(!pos) return; const containerRect=cellsContainer.getBoundingClientRect();
-const offsetX=(pos.x/containerPerfect! I have prepared the **Pronouns Quest** HTML game code for you. Based on your screenshot, your `assets` folder already contains all the required files:  
+function moveTokenTo(stepIndex){
+const pos=cellPositions[stepIndex];
+if(!pos)return;
+const containerRect=cellsContainer.getBoundingClientRect();
+token.style.left=(pos.x/containerRect.width*100)+'%';
+token.style.top=(pos.y/containerRect.height*100)+'%';
+}
 
-- `logo.png` → Splash screen logo  
-- `correct.mp3` → Correct answer sound  
-- `wrong.mp3` → Wrong answer sound  
-- `freesound_community-claps-44774.mp3` → Celebration sound  
+function shuffle(array){
+for(let i=array.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1));
+[array[i],array[j]]=[array[j],array[i]];
+}
+return array;
+}
 
-You can now place the **full HTML file** below as `index.html` inside `ela_games/g4/chp2/pronouns/` and it will work directly with your assets folder.  
+function initGame(){
+currentQuestions=shuffle([...questionBank]).slice(0,TOTAL_STEPS);
+currentIndex=0;
+correctCount=0;
+correctCountEl.textContent='0';
+currentStepEl.textContent=`1 / ${TOTAL_STEPS}`;
+totalScoreEl.textContent='0%';
+stageIndicator.textContent=`Step 1 of ${TOTAL_STEPS}`;
+setTimeout(initBoard,50);
+loadQuestion();
+}
 
-Here is the complete file (ready to use):  
-
-[Click here to download the ready-to-use Pronouns Quest HTML](sandbox:/mnt/data/Pronouns_Quest_index.html)  
-
-It includes:  
-- 10 sample pronoun questions (subject, object, possessive, reflexive)  
-- Board with token movement  
-- Feedback for correct/wrong answers  
-- Score panel and final screen with rank  
-- Splash screen with your `logo.png`  
-- Audio integration using your current `mp3` files  
-
-Once you place it in the folder, open `index.html` in a browser to test the game.  
-
-If you want, I can also **expand the question bank to 18–20 pronoun questions** so it matches the original Soul Quest length exactly. Do you want me to do that?
+function loadQuestion(){
+const q=currentQuestions[currentIndex];
+questionText.textContent=q.question;
+optionsContainer.innerHTML='';
+feedback.style.display='none';
+feedback.textContent='';
+document.getElementById('progressText').textContent='Answer to move along the path.';
+nextBtn.style.display='none';
+q.options.forEach((opt,index)=>{
+const btn=document.createElement('button');
+btn.className='option-btn';
+btn.textContent=opt;
+btn.add

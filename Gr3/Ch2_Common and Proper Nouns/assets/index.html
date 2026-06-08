@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Common and Proper Nouns Game</title>
+<style>
+body {
+    margin:0; padding:0; font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #ffecb3, #ffe0b2);
+    display: flex; justify-content: center; align-items: center;
+    flex-direction: column;
+    min-height: 100vh; position: relative;
+}
+#logo-screen {
+    display:flex; justify-content:center; align-items:center;
+    width:100%; height:100vh; background:white;
+    position:absolute; top:0; left:0; z-index:10;
+}
+#game-container {
+    display:none; flex-direction: column; align-items: center;
+    max-width: 600px; width: 95%;
+}
+h2 { margin:10px 0; text-align:center;}
+#drop-zones {
+    display: flex; justify-content: space-around; flex-wrap: wrap; width: 100%; margin-top:20px;
+}
+.drop-zone {
+    width: 45%; min-height: 80px; border: 2px dashed #4a148c; border-radius:10px;
+    display:flex; align-items:center; justify-content:center; margin:10px; font-size:1.2rem; font-weight:bold;
+    color:#4a148c; background: #fff;
+}
+#word-tile {
+    margin-top: 20px; font-weight:bold; font-size:1.3rem; padding: 15px 20px; border-radius:10px; cursor:pointer;
+    user-select:none; color:white; display:inline-block;
+}
+#score-popup {
+    display:none; position:fixed; top:50%; left:50%; transform: translate(-50%, -50%);
+    background:#fff; padding:20px 40px; border-radius:15px; box-shadow:0 0 10px rgba(0,0,0,0.5); text-align:center;
+    z-index:20;
+}
+#restart-btn {
+    margin-top:20px; padding:10px 20px; border:none; background-color:#4db6ac; color:white; font-size:1rem;
+    border-radius:8px; cursor:pointer;
+}
+table {
+    margin-top:15px; border-collapse: collapse; width:100%;
+}
+th, td {
+    border:1px solid #4a148c; padding:5px 10px; text-align:center;
+}
+th { background-color:#673ab7; color:white; }
+</style>
+</head>
+<body>
+
+<div id="logo-screen">
+    <img src="assets/innovine-logo 1.png" alt="Logo" style="max-width:200px;">
+</div>
+
+<div id="game-container">
+    <h2 id="question">Drag the word to the correct category: Common or Proper Noun</h2>
+    <div id="drop-zones">
+        <div class="drop-zone" id="common">Common Noun</div>
+        <div class="drop-zone" id="proper">Proper Noun</div>
+    </div>
+    <div id="word-tile"></div>
+</div>
+
+<div id="score-popup">
+    <h2 id="score-text"></h2>
+    <div id="wrong-table-container"></div>
+    <button id="restart-btn">Restart</button>
+</div>
+
+<audio id="clap-sound" src="clap.mp3" volume="1"></audio>
+
+<script>
+// Words: [word, correct category]
+let words = [
+    ["dog","common"], ["school","common"], ["book","common"], ["city","common"], ["river","common"],
+    ["Riya","proper"], ["Mumbai","proper"], ["Rahul","proper"], ["Ganga","proper"], ["India","proper"],
+    ["teacher","common"], ["apple","common"], ["Ananya","proper"], ["Delhi","proper"], ["friend","common"]
+];
+
+// Shuffle words
+words = words.sort(()=>Math.random()-0.5);
+
+let currentWordIndex = 0;
+let correctCount = 0;
+let wrongAnswers = []; // store wrong attempts
+const wordTile = document.getElementById("word-tile");
+
+function showNextWord(){
+    if(currentWordIndex >= words.length){
+        showScore();
+        return;
+    }
+    const [word, category] = words[currentWordIndex];
+    wordTile.textContent = word;
+    wordTile.style.backgroundColor = getRandomColor();
+    wordTile.setAttribute("data-category", category);
+}
+
+function getRandomColor(){
+    const colors = ["#f44336","#e91e63","#9c27b0","#673ab7","#3f51b5","#2196f3","#009688","#4caf50","#ff9800","#ff5722"];
+    return colors[Math.floor(Math.random()*colors.length)];
+}
+
+// Drag and drop
+wordTile.setAttribute("draggable","true");
+wordTile.addEventListener("dragstart", e=>{
+    e.dataTransfer.setData("text/plain", e.target.textContent);
+});
+
+const dropZones = document.querySelectorAll(".drop-zone");
+dropZones.forEach(zone=>{
+    zone.addEventListener("dragover", e=>e.preventDefault());
+    zone.addEventListener("drop", e=>{
+        e.preventDefault();
+        const word = wordTile.textContent;
+        const correctCategory = wordTile.getAttribute("data-category");
+        if(e.target.id === correctCategory){
+            e.target.style.backgroundColor = "#c8e6c9";
+            playClap();
+            confettiEffect(e.target);
+            correctCount++;
+        } else {
+            e.target.style.backgroundColor = "#ffcdd2";
+            wrongAnswers.push({word: word, correct: correctCategory});
+            setTimeout(()=>{ e.target.style.backgroundColor="#fff"; },500);
+        }
+        currentWordIndex++;
+        setTimeout(()=>{ resetZones(); showNextWord(); },500);
+    });
+});
+
+function resetZones(){
+    dropZones.forEach(z=>z.style.backgroundColor="#fff");
+}
+
+// Score popup with wrong answers table
+function showScore(){
+    document.getElementById("game-container").style.display="none";
+    const popup = document.getElementById("score-popup");
+    const scoreText = document.getElementById("score-text");
+    if(correctCount<=5) scoreText.textContent="Let's revisit the topic and come back.";
+    else if(correctCount<=10) scoreText.textContent="Well Done";
+    else scoreText.textContent="Excellent Work";
+
+    if(wrongAnswers.length > 0){
+        const tableContainer = document.getElementById("wrong-table-container");
+        let html = '<table><tr><th>Word</th><th>Correct Category</th></tr>';
+        wrongAnswers.forEach(item=>{
+            html += `<tr><td>${item.word}</td><td>${item.correct}</td></tr>`;
+        });
+        html += '</table>';
+        tableContainer.innerHTML = html;
+    }
+    popup.style.display="block";
+}
+
+document.getElementById("restart-btn").addEventListener("click", ()=>{
+    location.reload();
+});
+
+function playClap(){
+    const audio = document.getElementById("clap-sound");
+    audio.currentTime=0;
+    audio.volume=1;
+    audio.play();
+}
+
+// Simple confetti
+function confettiEffect(tile){
+    for(let i=0;i<15;i++){
+        const confetti = document.createElement("div");
+        confetti.style.position="absolute";
+        confetti.style.width="10px";
+        confetti.style.height="10px";
+        confetti.style.backgroundColor=getRandomColor();
+        confetti.style.borderRadius="50%";
+        const rect = tile.getBoundingClientRect();
+        confetti.style.left=rect.left + rect.width/2 + "px";
+        confetti.style.top=rect.top + rect.height/2 + "px";
+        document.body.appendChild(confetti);
+        let angle=Math.random()*2*Math.PI;
+        let distance=0;
+        const interval = setInterval(()=>{
+            distance+=5;
+            confetti.style.left = rect.left + rect.width/2 + Math.cos(angle)*distance + "px";
+            confetti.style.top = rect.top + rect.height/2 + Math.sin(angle)*distance + "px";
+            if(distance>100){ clearInterval(interval); confetti.remove();}
+        },20);
+    }
+}
+
+// Start
+window.onload = ()=>{
+    setTimeout(()=>{
+        document.getElementById("logo-screen").style.display="none";
+        document.getElementById("game-container").style.display="flex";
+        showNextWord();
+    },5000);
+};
+</script>
+</body>
+</html>

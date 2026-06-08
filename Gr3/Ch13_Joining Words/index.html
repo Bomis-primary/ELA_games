@@ -5,14 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Joining Words Game</title>
 <style>
-body { font-family: Arial; display: flex; flex-direction: column; align-items:center; justify-content: center; background: linear-gradient(135deg,#fff9c4,#fff59d); min-height:100vh; margin:0; }
-#logo-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:white; display:flex; justify-content:center; align-items:center; z-index:10; }
-#game-container { display:none; flex-direction: column; align-items:center; max-width:600px; width:95%; animation: fadeIn 1s ease-in; }
-h2 { text-align:center; }
+body {
+    font-family: Arial;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    min-height:100vh;
+    margin:0;
+    /* Nature washed-out background */
+    background: url('assets/aaab610d-358b-45d7-ad25-08418f895185.png') no-repeat center center fixed;
+    background-size: cover;
+    background-blend-mode: lighten;
+    background-color: rgba(255,255,255,0.6);
+}
+#logo-screen {
+    position:fixed; top:0; left:0; width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:10; background:white;
+}
+#game-container {
+    display:none; flex-direction: column; align-items:center;
+    max-width:600px; width:95%; animation: fadeIn 1s ease-in;
+}
+h2 { text-align:center; color:#4a148c; text-shadow: 1px 1px 2px white; }
 .options { display:flex; flex-direction: column; margin-top:20px; }
 .option-btn { background:#ffe082; color:#4a148c; border:none; padding:15px; margin:5px 0; border-radius:8px; cursor:pointer; font-size:1.1rem; transition: transform 0.3s, background 0.3s; }
 .option-btn:hover { transform: scale(1.05); }
-#timer { margin-top:10px; font-weight:bold; font-size:1.2rem; }
+#timer { margin-top:10px; font-weight:bold; font-size:1.2rem; color:#4a148c; text-shadow: 1px 1px 1px white; }
 @keyframes fadeIn { from {opacity:0; transform: translateY(-20px);} to {opacity:1; transform: translateY(0);} }
 .correct-anim { animation: pop 0.5s; }
 @keyframes pop { 0% {transform:scale(1);} 50% {transform:scale(1.3);} 100% {transform:scale(1);} }
@@ -26,7 +44,7 @@ th { background-color:#fbc02d; color:white; }
 <body>
 
 <div id="logo-screen">
-    <img src="assets/7aa5e401-15de-48fc-94d6-75adfc42cd20.png" style="max-width:200px;" alt="Logo">
+    <img src="assets/innovine-logo 1.png" style="max-width:200px;" alt="Logo">
 </div>
 
 <div id="game-container">
@@ -45,7 +63,6 @@ th { background-color:#fbc02d; color:white; }
 <audio id="clap-sound" src="clap.mp3" volume="1"></audio>
 
 <script>
-// Dynamic prompt variations
 const prompts = [
     "Which word best completes the sentence?",
     "Which word can be used in the blank?",
@@ -53,7 +70,6 @@ const prompts = [
     "Choose the correct word to fill in the blank."
 ];
 
-// Questions: 15 joining words with punctuation
 const questions = [
     {q:"I like tea ___ coffee.", options:["and","but"], answer:"and"},
     {q:"I wanted to go ___ I was sick.", options:["and","but"], answer:"but"},
@@ -85,7 +101,6 @@ function showQuestion(){
     }
     const q = questions[currentQuestion];
     document.getElementById("question-text").textContent = q.q;
-    // Random prompt
     const prompt = prompts[Math.floor(Math.random()*prompts.length)];
     document.getElementById("question-prompt").textContent = prompt;
 

@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grade 2 Mystery Box Game</title>
 <style>
-body {margin:0;font-family:Arial,sans-serif;background:linear-gradient(to bottom,#a0eaff,#f7f0ff);display:flex;justify-content:center;align-items:center;height:100vh;overflow:hidden;}
+body {margin:0;font-family:Arial,sans-serif;background:linear-gradient(to bottom,#a0eaff,#f7f0ff);display:flex;justify-content:center;align-items:center;height:100vh;overflow:hidden;flex-direction:column;}
+#instructions{font-size:18px;font-weight:bold;margin-bottom:15px;text-align:center;max-width:600px;}
 #logo-screen,#game-screen,#result-screen{position:absolute;width:100%;height:100%;display:none;justify-content:center;align-items:center;flex-direction:column;}
-#logo-screen img{width:250px;}
-#question-box{position:relative;width:250px;height:250px;perspective:800px;cursor:pointer;}
+#logo-screen img{width:60%;max-width:400px;}
+#question-box{position:relative;width:250px;height:250px;perspective:800px;cursor:pointer;margin-top:10px;}
 .box{width:100%;height:100%;position:relative;border-radius:20px;background:#ffde7d;box-shadow: 0 8px 20px rgba(0,0,0,0.3);}
 .lid,.base{width:100%;height:50%;position:absolute;left:0;transform-origin:top center;transition: transform 1s ease;border-radius:20px;}
 .lid{top:0;background:#ffb74d;z-index:2;border-bottom:3px solid #c87f2b;}
@@ -30,9 +31,16 @@ body {margin:0;font-family:Arial,sans-serif;background:linear-gradient(to bottom
 
 <div id="volume-control">Volume: <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1"></div>
 
-<div id="logo-screen"><img src="assets/innovinelogo.png" alt="Innovine Logo"></div>
+<!-- Full-page logo screen -->
+<div id="logo-screen">
+  <img src="assets/innovinelogo.png" alt="Innovine Logo">
+</div>
 
+<!-- Game screen -->
 <div id="game-screen">
+  <div id="instructions">
+    Click on the box to reveal a noun. Decide whether it is singular or plural and click on the correct option.
+  </div>
   <div id="question-box">
     <div class="box" id="box">
       <div class="lid"></div>
@@ -57,7 +65,7 @@ body {margin:0;font-family:Arial,sans-serif;background:linear-gradient(to bottom
 <audio id="clap-sound" src="assets/clapping.mp3"></audio>
 
 <script>
-// 15 unique objects with emojis; benches, mangoes, dresses kept plural
+// 15 unique emoji objects
 const questions = [
   {emoji:'🐱', count:1, singular:true, word:'cat'},
   {emoji:'🐶', count:1, singular:true, word:'dog'},
@@ -113,11 +121,16 @@ function startGame(){
   shuffledQuestions = shuffle([...questions]);
   currentQuestion = 0;
   score = 0;
-  setTimeout(()=>{
-    logoScreen.style.display='none';
-    gameScreen.style.display='flex';
-    showQuestion();
-  },5000);
+
+  // Wait 5 seconds or allow click to continue
+  setTimeout(()=>showNextScreen(),5000);
+  logoScreen.onclick = ()=>showNextScreen();
+}
+
+function showNextScreen(){
+  logoScreen.style.display='none';
+  gameScreen.style.display='flex';
+  showQuestion();
 }
 
 function showQuestion(){
@@ -157,7 +170,6 @@ function checkAnswer(selected,q){
 }
 
 function playSound(audio){ audio.currentTime=0; audio.play(); }
-
 function celebrate(){
   for(let i=0;i<30;i++){
     const confetti=document.createElement('div');
